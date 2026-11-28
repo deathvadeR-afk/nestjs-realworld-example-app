@@ -1,4 +1,13 @@
-import { ArrayType, Collection, type EntityDTO, EntityName, type LazyRef, type Loaded, type Rel, wrap } from '@mikro-orm/mysql';
+import {
+  ArrayType,
+  Collection,
+  type EntityDTO,
+  EntityName,
+  type LazyRef,
+  type Loaded,
+  type Rel,
+  wrap,
+} from '@mikro-orm/mysql';
 import { Entity, ManyToOne, OneToMany, PrimaryKey, Property } from '@mikro-orm/decorators/legacy';
 import slug from 'slug';
 

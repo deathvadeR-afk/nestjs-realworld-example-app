@@ -37,7 +37,10 @@ export class ArticleService {
     }
 
     if ('favorited' in query) {
-      const favoritingUser = await this.userRepository.findOne({ username: query.favorited }, { populate: ['favorites'] });
+      const favoritingUser = await this.userRepository.findOne(
+        { username: query.favorited },
+        { populate: ['favorites'] },
+      );
 
       if (!favoritingUser) {
         return { articles: [], articlesCount: 0 };

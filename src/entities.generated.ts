@@ -7,12 +7,7 @@ import { Tag } from './tag/tag.entity';
 import { User } from './user/user.entity';
 import { EntityManager as DriverEntityManager } from '@mikro-orm/mysql';
 
-export const entities = [
-  Article,
-  Comment,
-  Tag,
-  User,
-] as const;
+export const entities = [Article, Comment, Tag, User] as const;
 
 export type Database = typeof entities;
 
