@@ -10,6 +10,24 @@ import { CreateArticleDto, CreateCommentDto } from './dto';
 
 type Viewer = Loaded<User, 'followers' | 'favorites'>;
 
+export function cleanTagList(tags: string[]): string[] {
+  const seen = new Set<string>();
+  const cleaned: string[] = [];
+
+  for (const tag of tags) {
+    const normalized = tag.trim().toLowerCase();
+
+    if (normalized === '' || seen.has(normalized)) {
+      continue;
+    }
+
+    seen.add(normalized);
+    cleaned.push(normalized);
+  }
+
+  return cleaned;
+}
+
 @Injectable()
 export class ArticleService {
   constructor(
@@ -37,7 +55,10 @@ export class ArticleService {
     }
 
     if ('favorited' in query) {
-      const favoritingUser = await this.userRepository.findOne({ username: query.favorited }, { populate: ['favorites'] });
+      const favoritingUser = await this.userRepository.findOne(
+        { username: query.favorited },
+        { populate: ['favorites'] },
+      );
 
       if (!favoritingUser) {
         return { articles: [], articlesCount: 0 };
@@ -131,7 +152,7 @@ export class ArticleService {
   async create(user: Viewer, dto: CreateArticleDto) {
     const author = await this.em.populate(user, ['articles']);
     const article = new Article(author, dto.title, dto.description, dto.body);
-    article.tagList.push(...dto.tagList);
+    article.tagList.push(...cleanTagList(dto.tagList));
     author.articles.add(article);
     await this.em.flush();
     const loaded = await this.em.populate(article, ['author']);
